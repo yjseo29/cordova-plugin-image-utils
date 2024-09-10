@@ -1,0 +1,31 @@
+{
+  "name": "cordova-plugin-image-utils",
+  "version": "1.0.0",
+  "description": "cordova-plugin-image-utils",
+  "cordova": {
+    "id": "cordova-plugin-image-utils",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yjseo29/cordova-plugin-image-utils.git"
+  },
+  "keywords": [
+    "cordova"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "yjteam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yjseo29/cordova-plugin-image-utils/issues"
+  },
+  "homepage": "https://github.com/yjseo29/cordova-plugin-image-utils"
+}

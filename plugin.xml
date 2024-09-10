@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-image-utils"
+    version="1.0.0">
+    <name>cordova-plugin-image-utils</name>
+    <description>cordova-plugin-image-utils</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova</keywords>
+    <repo>https://github.com/yjseo29/cordova-plugin-image-utils.git</repo>
+	<engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <js-module src="www/ImageUtils.js">
+       <clobbers target="cordova.plugins.imageUtils" />
+    </js-module>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="ImageUtils">
+                <param name="android-package" value="org.apache.cordova.ImageUtils" />
+				<param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+		<config-file parent="/manifest" target="AndroidManifest.xml">
+			<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+		</config-file>
+
+		<source-file src="src/android/ImageUtils.java" target-dir="src/org/apache/cordova" />
+
+		<framework src="androidx.exifinterface:exifinterface:1.3.7" />
+    </platform>
+
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+			<feature name="ImageUtils">
+				<param name="ios-package" value="ImageUtils"/>
+			</feature>
+		</config-file>
+
+		<header-file src="src/ios/ImageUtils.h" />
+		<source-file src="src/ios/ImageUtils.m" />
+	</platform>
+</plugin>
