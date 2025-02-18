@@ -51,7 +51,7 @@
     UIGraphicsEndImageContext();
 
     NSString *thumbnail = [UIImageJPEGRepresentation(resizedImage, q) base64EncodedStringWithOptions:0];
-    return thumbnail;
+    return [NSString stringWithFormat:@"data:image/jpeg;base64,%@", thumbnail];
 }
 
 - (void)extractThumbnail:(CDVInvokedUrlCommand*)command

@@ -7,6 +7,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import androidx.exifinterface.media.ExifInterface;
 
@@ -54,14 +55,20 @@ public class ImageUtils extends CordovaPlugin {
             int quality = jsonObject.getInt("quality");
 
             if(quality<100){
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                String compFileName = "compressImage_"+System.currentTimeMillis()+".jpg";
-                File file = new File(cordova.getActivity().getExternalCacheDir(), compFileName);
-
                 if(path.startsWith("content://")){
                     path = FileHelper.getRealPath(path, cordova);
                 }
-                rotatingImage(getBitmapRotate(path), BitmapFactory.decodeFile(path)).compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream);
+
+                String fileExtension = ".jpg";
+                if ("png".equalsIgnoreCase(MimeTypeMap.getFileExtensionFromUrl(Uri.encode(path)))) {
+                    fileExtension = ".png";
+                }
+
+                String compFileName = "compressImage_" + System.currentTimeMillis() + fileExtension;
+                File file = new File(cordova.getActivity().getExternalCacheDir(), compFileName);
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                rotatingImage(getBitmapRotate(path), BitmapFactory.decodeFile(path)).compress(fileExtension.equals(".jpg") ? Bitmap.CompressFormat.JPEG : Bitmap.CompressFormat.PNG, quality, byteArrayOutputStream);
 
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
@@ -106,10 +113,10 @@ public class ImageUtils extends CordovaPlugin {
 
                 Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeStream(FileHelper.getInputStreamFromUriString(path, cordova)), thumbnailW, thumbnailH);
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                thumbImage.compress(Bitmap.CompressFormat.JPEG, thumbnailQuality, byteArrayOutputStream);
+                thumbImage.compress("png".equalsIgnoreCase(MimeTypeMap.getFileExtensionFromUrl(Uri.encode(path))) ? Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG, thumbnailQuality, byteArrayOutputStream);
                 byte[] imageBytes = byteArrayOutputStream.toByteArray();
                 byteArrayOutputStream.close();
-                jsonObject.put("thumbnailBase64", Base64.encodeToString(imageBytes, Base64.NO_WRAP));
+                jsonObject.put("thumbnailBase64", ("png".equalsIgnoreCase(MimeTypeMap.getFileExtensionFromUrl(Uri.encode(path))) ? "data:image/png;base64," : "data:image/jpeg;base64,") + Base64.encodeToString(imageBytes, Base64.NO_WRAP));
 
                 callbackContext.success(jsonObject);
             } catch (Exception e) {
